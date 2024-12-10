@@ -1,6 +1,6 @@
 {
 	"required": true,
-	"package": "net.dafarka.mixin",
+	"package": "net.dafarka.player_notify.mixin",
 	"compatibilityLevel": "JAVA_21",
 	"mixins": [
 	],

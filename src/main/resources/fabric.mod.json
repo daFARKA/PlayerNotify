@@ -11,15 +11,15 @@
 		"homepage": "",
 		"sources": ""
 	},
-	"license": "GLPv3",
+	"license": "GPLv3",
 	"icon": "assets/player_notify/icon.png",
 	"environment": "*",
 	"entrypoints": {
 		"client": [
-			"net.dafarka.PlayerNotify"
+			"net.dafarka.player_notify.PlayerNotify"
 		],
 		"modmenu": [
-			"net.dafarka.PNMenuIntegration"
+			"net.dafarka.player_notify.MenuIntegration"
 		]
 	},
 	"mixins": [
