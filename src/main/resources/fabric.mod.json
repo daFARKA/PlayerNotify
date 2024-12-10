@@ -8,8 +8,8 @@
 		"daFARKA"
 	],
 	"contact": {
-		"homepage": "",
-		"sources": ""
+		"homepage": "https://www.curseforge.com/minecraft/mc-mods/player-notify",
+		"sources": "https://github.com/daFARKA/PlayerNotify"
 	},
 	"license": "GPLv3",
 	"icon": "assets/player_notify/icon.png",

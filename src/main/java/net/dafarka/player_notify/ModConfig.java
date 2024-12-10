@@ -18,6 +18,8 @@ public class ModConfig implements ConfigData {
     }
 
     public boolean enableMod = true;
-    @ConfigEntry.BoundedDiscrete(min = 5, max = 50)
+    @ConfigEntry.BoundedDiscrete(min = 5, max = 1000)
     public int range = 10;
+    @ConfigEntry.BoundedDiscrete(min = 1, max = 300)
+    public int seconds = 1;
 }
