@@ -1,0 +1,34 @@
+{
+	"schemaVersion": 1,
+	"id": "player_notify",
+	"version": "${version}",
+	"name": "Player Notify",
+	"description": "Notifies the player when another player is in a certain range.",
+	"authors": [
+		"daFARKA"
+	],
+	"contact": {
+		"homepage": "",
+		"sources": ""
+	},
+	"license": "GLPv3",
+	"icon": "assets/player_notify/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"client": [
+			"net.dafarka.PlayerNotify"
+		],
+		"modmenu": [
+			"net.dafarka.PNMenuIntegration"
+		]
+	},
+	"mixins": [
+		"player_notify.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.16.9",
+		"minecraft": "~1.21.3",
+		"java": ">=21",
+		"fabric-api": "*"
+	}
+}

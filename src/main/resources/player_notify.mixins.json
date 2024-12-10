@@ -1,0 +1,13 @@
+{
+	"required": true,
+	"package": "net.dafarka.mixin",
+	"compatibilityLevel": "JAVA_21",
+	"mixins": [
+	],
+	"client": [
+		"PlayerNotifyMixin"
+	],
+	"injectors": {
+		"defaultRequire": 1
+	}
+}
