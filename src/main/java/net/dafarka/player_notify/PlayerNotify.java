@@ -5,6 +5,7 @@ import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandManager;
 import net.fabricmc.fabric.api.client.command.v2.ClientCommandRegistrationCallback;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
+import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.MinecraftClient;
 import net.minecraft.client.network.ClientPlayerEntity;
 import net.minecraft.entity.player.PlayerEntity;
@@ -14,6 +15,10 @@ import net.minecraft.util.Formatting;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import java.util.HashSet;
+import java.util.Set;
+import java.util.stream.Collectors;
+
 
 public class PlayerNotify implements ClientModInitializer {
 	public static final String MOD_ID = "player_notify";
@@ -22,6 +27,8 @@ public class PlayerNotify implements ClientModInitializer {
 	public static TargetConfig targetConfig = new TargetConfig();
 
 	private int tickCounter = 0;
+
+	private final Set<String> knownPlayers = new HashSet<>();
 
 	@Override
 	public void onInitializeClient() {
@@ -83,6 +90,7 @@ public class PlayerNotify implements ClientModInitializer {
 						tickCounter++;
 						if (tickCounter >= ModConfig.INSTANCE.seconds * 20) {
 							checkPlayersInRange(client_);
+							checkPlayersJoining(client_);
 							tickCounter = 0;
 						}
 					}
@@ -91,6 +99,14 @@ public class PlayerNotify implements ClientModInitializer {
 		}
 	}
 
+	private void notifyPlayer(MinecraftClient client, String message, Formatting color) {
+		Text msg = Text.literal(message)
+			.setStyle(Style.EMPTY
+				.withBold(true)
+				.withColor(color)
+			);
+		client.player.sendMessage(msg, true);
+	}
 
 	private void checkPlayersInRange(MinecraftClient client) {
 		ClientPlayerEntity me = client.player;
@@ -106,16 +122,28 @@ public class PlayerNotify implements ClientModInitializer {
 						double distance = Math.sqrt(dx * dx + dz * dz);
 
 						if (distance <= ModConfig.INSTANCE.range) {
-							Text message = Text.literal(targetPlayerName + " is within range!")
-								.setStyle(Style.EMPTY
-									.withBold(true)
-									.withColor(Formatting.RED)
-								);
-							client.player.sendMessage(message, true);
+							notifyPlayer(client, targetPlayerName + " is within range!", Formatting.RED);
 						}
 					}
 				}
 			}
+		}
+	}
+
+	private void checkPlayersJoining(MinecraftClient client) {
+		if (client.world != null && client.player != null) {
+			Set<String> currentPlayers = client.world.getPlayers().stream()
+				.map(player -> player.getName().getString())
+				.collect(Collectors.toSet());
+
+			for (String targetPlayerName : targetConfig.targetPlayersName) {
+				if (currentPlayers.contains(targetPlayerName) && !knownPlayers.contains(targetPlayerName)) {
+					notifyPlayer(client, targetPlayerName + " has joined the server!", Formatting.BLUE);
+				}
+			}
+
+			knownPlayers.clear();
+			knownPlayers.addAll(currentPlayers);
 		}
 	}
 }

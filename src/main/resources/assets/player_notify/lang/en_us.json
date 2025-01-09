@@ -1,6 +1,6 @@
 {
   "text.autoconfig.player_notify.title" : "Player Notify Config",
   "text.autoconfig.player_notify.option.enableMod": "Enable Mod",
-  "text.autoconfig.player_notify.option.range": "Range",
+  "text.autoconfig.player_notify.option.range": "Range (Radius in Blocks)",
   "text.autoconfig.player_notify.option.seconds": "Check every x seconds for target players."
 }
