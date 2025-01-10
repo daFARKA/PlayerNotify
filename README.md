@@ -18,3 +18,6 @@ The user can add, remove, clear and see the list of players that are being targe
 ```
 /pn_list
 ```
+
+The user is also notified when a targeted player joins or disconnects from the server. 
+Be aware that the mod does NOT notify you when you have joined and targets are online.

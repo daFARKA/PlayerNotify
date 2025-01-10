@@ -28,7 +28,8 @@ public class PlayerNotify implements ClientModInitializer {
 
 	private int tickCounter = 0;
 
-	private final Set<String> knownPlayers = new HashSet<>();
+	private final Set<String> knownPlayers_j = new HashSet<>();
+	private final Set<String> knownPlayers_d = new HashSet<>();
 
 	@Override
 	public void onInitializeClient() {
@@ -91,6 +92,7 @@ public class PlayerNotify implements ClientModInitializer {
 						if (tickCounter >= ModConfig.INSTANCE.seconds * 20) {
 							checkPlayersInRange(client_);
 							checkPlayersJoining(client_);
+							checkPlayersDisconnecting(client_);
 							tickCounter = 0;
 						}
 					}
@@ -132,18 +134,35 @@ public class PlayerNotify implements ClientModInitializer {
 
 	private void checkPlayersJoining(MinecraftClient client) {
 		if (client.world != null && client.player != null) {
-			Set<String> currentPlayers = client.world.getPlayers().stream()
-				.map(player -> player.getName().getString())
+			Set<String> currentTabListPlayers = client.getNetworkHandler().getPlayerList().stream()
+				.map(entry -> entry.getProfile().getName())
 				.collect(Collectors.toSet());
 
 			for (String targetPlayerName : targetConfig.targetPlayersName) {
-				if (currentPlayers.contains(targetPlayerName) && !knownPlayers.contains(targetPlayerName)) {
-					notifyPlayer(client, targetPlayerName + " has joined the server!", Formatting.BLUE);
+				if (currentTabListPlayers.contains(targetPlayerName) && !knownPlayers_j.contains(targetPlayerName)) {
+					notifyPlayer(client, targetPlayerName + " joined the server!", Formatting.BLUE);
 				}
 			}
 
-			knownPlayers.clear();
-			knownPlayers.addAll(currentPlayers);
+			knownPlayers_j.clear();
+			knownPlayers_j.addAll(currentTabListPlayers);
+		}
+	}
+
+	private void checkPlayersDisconnecting(MinecraftClient client) {
+		if (client.world != null && client.player != null) {
+			Set<String> currentTabListPlayers = client.getNetworkHandler().getPlayerList().stream()
+				.map(entry -> entry.getProfile().getName())
+				.collect(Collectors.toSet());
+
+			for (String targetPlayerName : targetConfig.targetPlayersName) {
+				if (!currentTabListPlayers.contains(targetPlayerName) && knownPlayers_d.contains(targetPlayerName)) {
+					notifyPlayer(client, targetPlayerName + " disconnected from the server!", Formatting.GREEN);
+				}
+			}
+
+			knownPlayers_d.clear();
+			knownPlayers_d.addAll(currentTabListPlayers);
 		}
 	}
 }
