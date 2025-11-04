@@ -135,7 +135,7 @@ public class PlayerNotify implements ClientModInitializer {
 	private void checkPlayersJoining(MinecraftClient client) {
 		if (client.world != null && client.player != null) {
 			Set<String> currentTabListPlayers = client.getNetworkHandler().getPlayerList().stream()
-				.map(entry -> entry.getProfile().getName())
+				.map(entry -> entry.getProfile().name())
 				.collect(Collectors.toSet());
 
 			for (String targetPlayerName : targetConfig.targetPlayersName) {
@@ -152,7 +152,7 @@ public class PlayerNotify implements ClientModInitializer {
 	private void checkPlayersDisconnecting(MinecraftClient client) {
 		if (client.world != null && client.player != null) {
 			Set<String> currentTabListPlayers = client.getNetworkHandler().getPlayerList().stream()
-				.map(entry -> entry.getProfile().getName())
+				.map(entry -> entry.getProfile().name())
 				.collect(Collectors.toSet());
 
 			for (String targetPlayerName : targetConfig.targetPlayersName) {
